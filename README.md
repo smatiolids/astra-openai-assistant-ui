@@ -2,7 +2,9 @@
 
 ## Getting Started
 
-First, run the development server:
+Copy .env_sample to .env and set your environment variables
+
+Run the development server:
 
 ```bash
 npm run dev
