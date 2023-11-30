@@ -15,7 +15,7 @@ const API = {
       `${apiUrl}/${resource}/${IdToRecord(resource, id)}`,
     getMany: (resource, id) =>
       `${apiUrl}/${resource}/${IdToRecord(resource, id)}`,
-  }
+  },
 };
 
 const tranformData = (resource, data) => {
@@ -35,21 +35,23 @@ const tranformData = (resource, data) => {
   });
 };
 
-const getApiOptions = () =>
-{
-  const user = JSON.parse(localStorage.getItem("user"))
+const getApiOptions = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user.astra_db_id)
+    return {
+      headers: new Headers({}),
+    };
+
   return {
     headers: new Headers({
       "x-astra-db-id": user.astra_db_id,
       "x-astra-region": user.astra_region,
       "x-astra-keyspace": user.astra_keyspace,
       "x-astra-token": user.astra_token,
-
     }),
   };
-  
-}
-const apiOptions = getApiOptions()
+};
+const apiOptions = getApiOptions();
 
 const httpClient = fetchUtils.fetchJson;
 
@@ -65,7 +67,7 @@ const IdToRecord = (resource, id) => {
 const AstraDataProvider = {
   getList: (resource, params) => {
     const { perPage } = params.pagination;
-    
+
     /**
      * TO-DO: Handle filter, order and pagination
      */
@@ -110,7 +112,10 @@ const AstraDataProvider = {
   },
 
   getMany: (resource, params) => {
-    const url = API[resources[resource].API].getMany(resource, params.ids[0][0]);
+    const url = API[resources[resource].API].getMany(
+      resource,
+      params.ids[0][0]
+    );
     return httpClient(url, apiOptions).then(({ json }) => {
       return {
         data: tranformData(resource, json.data),
