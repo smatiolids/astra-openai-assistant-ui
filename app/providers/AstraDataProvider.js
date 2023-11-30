@@ -92,7 +92,7 @@ const AstraDataProvider = {
       );
     }
 
-    return httpClient(url, apiOptions).then(({ json }) => {
+    return httpClient(url, getApiOptions()).then(({ json }) => {
       return {
         data: tranformData(resource, json.data),
         total: json.count,

@@ -123,7 +123,7 @@ const StyledForm = styled(Form, {
   overridesResolver: (props, styles) => styles.root,
 })(({ theme }) => ({
   [`& .${LoginFormClasses.content}`]: {
-    width: 300,
+    width: 600,
   },
   [`& .${LoginFormClasses.button}`]: {
     marginTop: theme.spacing(2),
