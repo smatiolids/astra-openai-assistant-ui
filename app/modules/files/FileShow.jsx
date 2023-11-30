@@ -30,7 +30,6 @@ export const FileShow = (props) => (
 
 const FileChunks = () => {
   const record = useRecordContext();
-  // console.log("record", record);
   const { data, isLoading, error } = useGetList("file_chunks", {
     filter: { id: record.filename },
     meta: { raw: true },

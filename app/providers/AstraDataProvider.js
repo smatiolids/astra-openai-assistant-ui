@@ -2,10 +2,6 @@ import { fetchUtils } from "react-admin";
 import { stringify } from "query-string";
 import { AstraResources as resources } from "./AstraResources";
 
-// const apiUrl = `https://${process.env.ASTRA_DB_ID}-${
-//   process.env.ASTRA_DB_REGION
-// }.apps.astra.datastax.com/api/rest/v2`;
-
 const apiUrl = `/api/rest`;
 
 const API = {
@@ -19,19 +15,7 @@ const API = {
       `${apiUrl}/${resource}/${IdToRecord(resource, id)}`,
     getMany: (resource, id) =>
       `${apiUrl}/${resource}/${IdToRecord(resource, id)}`,
-  },
-  DOCUMENT: {
-    getBase: (resource, query) =>
-      `${apiUrl}/namespaces/${process.env.ASTRA_DB_KEYSPACE}/collections/${resource}`,
-    getList: (resource, query) =>
-      `${apiUrl}/namespaces/${
-        process.env.ASTRA_DB_KEYSPACE
-      }/collections/${resource}?${stringify(query)}`,
-    getOne: (resource, id) =>
-      `${apiUrl}/namespaces/${
-        process.env.ASTRA_DB_KEYSPACE
-      }/${resource}/collections/${IdToRecord(resource, id)}`,
-  },
+  }
 };
 
 const tranformData = (resource, data) => {
@@ -51,9 +35,21 @@ const tranformData = (resource, data) => {
   });
 };
 
-const apiOptions = {
-  headers: new Headers({}),
-};
+const getApiOptions = () =>
+{
+  const user = JSON.parse(localStorage.getItem("user"))
+  return {
+    headers: new Headers({
+      "x-astra-db-id": user.astra_db_id,
+      "x-astra-region": user.astra_region,
+      "x-astra-keyspace": user.astra_keyspace,
+      "x-astra-token": user.astra_token,
+
+    }),
+  };
+  
+}
+const apiOptions = getApiOptions()
 
 const httpClient = fetchUtils.fetchJson;
 
@@ -69,8 +65,7 @@ const IdToRecord = (resource, id) => {
 const AstraDataProvider = {
   getList: (resource, params) => {
     const { perPage } = params.pagination;
-    console.log("getList", params);
-
+    
     /**
      * TO-DO: Handle filter, order and pagination
      */
@@ -104,7 +99,6 @@ const AstraDataProvider = {
   },
 
   getOne: (resource, params) => {
-    console.log("getOne", params);
     const url = API[resources[resource].API].getOne(resource, params.id);
 
     return httpClient(url, apiOptions).then(({ json }) => ({
@@ -116,7 +110,6 @@ const AstraDataProvider = {
   },
 
   getMany: (resource, params) => {
-    console.log("getMany", params);
     const url = API[resources[resource].API].getMany(resource, params.ids[0][0]);
     return httpClient(url, apiOptions).then(({ json }) => {
       return {
@@ -130,7 +123,6 @@ const AstraDataProvider = {
     /**
      * TO-DO: Adjust for Astra
      */
-    console.log("getManyReference", resource, params);
     const url = API[resources[resource].API].getMany(resource, params.id);
 
     return httpClient(url, apiOptions).then(({ json }) => {
