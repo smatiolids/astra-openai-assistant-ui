@@ -14,7 +14,8 @@
     "next": "^14.0.4-canary.15",
     "react": "^18",
     "react-admin": "^4.16.1",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-hook-form": "^7.48.2"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,11 +1,6 @@
-import { NextResponse } from "next/server";
-import type { NextApiRequest } from "next";
+import { NextResponse, NextRequest } from "next/server";
 
-export async function POST(req: NextApiRequest) {
-  return handler(req);
-}
-
-export async function handler(req: NextApiRequest) {
+export async function POST(req: NextRequest) {
   const body = await req.json();
   const apiUrl = `https://${body.astra_db_id}-${body.astra_region}.apps.astra.datastax.com/api/rest/v2/schemas/keyspaces/${body.astra_keyspace}`;
   const options = {
@@ -19,3 +14,5 @@ export async function handler(req: NextApiRequest) {
   const data = await response.json();
   return NextResponse.json(data, { status: response.status });
 }
+
+

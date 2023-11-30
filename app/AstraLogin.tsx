@@ -1,13 +1,13 @@
 import * as React from "react";
-import { useState } from "react";
 import { useLogin, useNotify, Login, LoginForm, TextInput } from "react-admin";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { Button, CardContent, CircularProgress } from "@mui/material";
 import { Form, required, useTranslate, useSafeSetState } from "ra-core";
 import { Typography } from "@mui/material";
+import { FieldValues } from "react-hook-form";
 
-const AstraLoginPage = ({ theme }) => {
+const AstraLoginPage = () => {
   return (
     <Login backgroundImage="bg-login.png">
       <AstraLoginForm />
@@ -23,10 +23,11 @@ export const AstraLoginForm = (props: LoginFormProps) => {
   const login = useLogin();
   const translate = useTranslate();
   const notify = useNotify();
+  // const { handleSubmit } = useForm<FormData>();
 
-  const submit = (values: FormData) => {
+  const submit : SubmitHandler<any> = (data) => {
     setLoading(true);
-    login(values, redirectTo)
+    login(data, redirectTo)
       .then(() => {
         setLoading(false);
       })
@@ -61,11 +62,11 @@ export const AstraLoginForm = (props: LoginFormProps) => {
       className={className}
     >
       <CardContent className={LoginFormClasses.content}>
-        <Typography flex="1" variant="h6" >
+        <Typography flex="1" variant="h4">
           Astra OpenAI Assistant
         </Typography>
 
-        <Typography flex="1" >
+        <Typography flex="1">
           Input the Astra DB Vector API Endpoint and Token
         </Typography>
 
@@ -132,15 +133,18 @@ const StyledForm = styled(Form, {
   },
 }));
 
+type SubmitHandler<T> = (values: T) => void;
+
 export interface LoginFormProps {
   redirectTo?: string;
   className?: string;
 }
 
-interface FormData {
+interface FormData extends FieldValues  {
   username: string;
   password: string;
 }
+
 LoginForm.propTypes = {
   redirectTo: PropTypes.string,
 };
