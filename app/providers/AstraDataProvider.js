@@ -37,7 +37,7 @@ const tranformData = (resource, data) => {
 
 const getApiOptions = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  if (!user.astra_db_id)
+  if (!user)
     return {
       headers: new Headers({}),
     };

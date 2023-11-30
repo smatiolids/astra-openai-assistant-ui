@@ -62,7 +62,7 @@ export const AstraLoginForm = (props: LoginFormProps) => {
       className={className}
     >
       <CardContent className={LoginFormClasses.content}>
-        <Typography flex="1" variant="h4">
+        <Typography flex="1" variant="h6">
           Astra OpenAI Assistant
         </Typography>
 
